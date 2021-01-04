@@ -2459,6 +2459,7 @@ void CUDE_OutlookDlg::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CUDE_OutlookDlg::DelayTimeRun()
 {
+	int in = 10;
 again:
 
 	LARGE_INTEGER cpuFreq;
