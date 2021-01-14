@@ -42,9 +42,6 @@
     <ClInclude Include="ControllerAddDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FindCtrlFile.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CtrlSet.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -90,6 +87,12 @@
     <ClInclude Include="NewSmartDots.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectName.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoLockTime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UDE_Outlook.cpp">
@@ -108,9 +111,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ControllerAddDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FindCtrlFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CtrlSet.cpp">
@@ -156,6 +156,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="NewSmartDots.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectName.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoLockTime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

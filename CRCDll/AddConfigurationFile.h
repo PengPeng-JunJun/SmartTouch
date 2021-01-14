@@ -45,7 +45,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
-	virtual void _DefaultFocus(void);
 	DECLARE_EVENTSINK_MAP()
 	void LBtClickedBlAddOK(long nFlags);
 	void LBtClickedBlAddCancel(long nFlags);
@@ -56,7 +55,6 @@ public:
 	int AddFile();
 	void ShowConfigurationParam();
 	void SaveConfigurationParam();
-	CString GetExePath(void);
 
 public:
 	CBL_DropDown m_BL_CheckModeName;
@@ -72,10 +70,8 @@ public:
 public:
 	CString m_strDropdownData;
 	BOOL m_bIsFileChanged;//文件是否存在
-	CString m_strExePath;
 
 public:
-
 	void SelectChangedBlCheckmodename(LPCTSTR strOld, LPCTSTR strNew, short nPos);
 
 protected:

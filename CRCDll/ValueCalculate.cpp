@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ValueCalculate.h"
 
-
 CValueCalculate::CValueCalculate(void)
 {
 }
@@ -9,16 +8,6 @@ CValueCalculate::CValueCalculate(void)
 
 CValueCalculate::~CValueCalculate(void)
 {
-}
-
-
-CString CValueCalculate::GetExePath(void)  
-{
-	CString strExePath;  
-	GetModuleFileName(NULL, strExePath.GetBuffer(MAX_PATH), MAX_PATH);  
-	strExePath.ReleaseBuffer();  
-	strExePath = strExePath.Left(strExePath.ReverseFind(_T('\\')));  
-	return strExePath;  
 }
 
 int CValueCalculate::ValueCalculate(int nValue, int nTransform)
@@ -241,6 +230,34 @@ vector<CString> CValueCalculate::CutString(CString strInput, char chTag)
 }
 
 
+vector<CString> CValueCalculate::CutStringElse(CString strInput, char chTag)
+{
+	vector<CString> strReturn;
+	int nCounter = 0;
+	CString strTem = _T("");
+	for (int i = 0; i < strInput.GetLength(); i++)
+	{
+		if (strInput[i] == chTag)
+		{
+			strTem = _T("");
+			for (int j = nCounter; j < i; j++)
+			{
+				strTem.Insert(strTem.GetLength(), strInput[j]);
+			}
+			strReturn.push_back(strTem);
+			nCounter = i + 1;
+		}
+	}
+	strTem = _T("");
+	for (int k = nCounter; k < strInput.GetLength(); k++)
+	{
+		strTem.Insert(strTem.GetLength(), strInput[k]);
+	}
+	strReturn.push_back(strTem);
+	return strReturn;
+}
+
+
 vector<CString> CValueCalculate::CutString(CString strInput, int nCounter)
 {
 	vector<CString> strReturn;
@@ -309,7 +326,7 @@ long long CValueCalculate::CRCCheck(CString strInput, int nDataType, CString str
 void CValueCalculate::LoadConfigurationParam(CString strChecckMode, CString & strInputString, int & nWidth, CString & strInitData, CString & strXOROut, BOOL & bRefIn, BOOL & bRefOut)
 {
 	CString strPath;	
-	strPath = GetExePath() + _T("\\Configuration\\") + strChecckMode + _T(".ini");
+	strPath = g_strExePath + _T("\\Configuration\\") + strChecckMode + _T(".ini");
 
 	CString strWidth;
 	CString strRefIn;
@@ -340,7 +357,6 @@ vector<int> CValueCalculate::FindCharInString(CString strInfo, char chInfo)
 	}
 	return vnInfo;
 }
-
 
 int CValueCalculate::CheckModeCMP(CString strMode)//–£—È‘ÀÀ„
 {

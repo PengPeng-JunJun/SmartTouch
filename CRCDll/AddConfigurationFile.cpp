@@ -21,7 +21,6 @@ CAddConfigurationFile::CAddConfigurationFile(UINT nIDTemplate, CWnd * pParent/* 
 	,m_strDropdownData(_T(""))
 	,m_bIsFileChanged(FALSE)
 {
-	m_strExePath = GetExePath();
 }
 
 CAddConfigurationFile::~CAddConfigurationFile()
@@ -61,26 +60,14 @@ BOOL CAddConfigurationFile::OnInitDialog()
 	SetTitle(_T("新增CRC配置文件"));
 
 	m_BtBaseClose.ShowWindow(SW_HIDE);
-	
+
 	m_BL_CheckModeName.SetDropDownData(m_strDropdownData);
+	m_BtBaseOk.ShowWindow(SW_HIDE);
+	m_BtBaseCancel.ShowWindow(SW_HIDE);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }
-
-void CAddConfigurationFile:: _DefaultFocus(void)
-{
-	m_BtBaseOk.ShowWindow(FALSE);
-	m_BtBaseCancel.ShowWindow(FALSE);
-}
-
-CString CAddConfigurationFile::GetExePath(void)  
-{  
-	CString strExePath;  
-	GetModuleFileName(NULL, strExePath.GetBuffer(MAX_PATH), MAX_PATH);  
-	strExePath.ReleaseBuffer();  
-	strExePath = strExePath.Left(strExePath.ReverseFind(_T('\\')));  
-	return strExePath;  
-} 
 
 BEGIN_EVENTSINK_MAP(CAddConfigurationFile, CTpLayerWnd)
 	ON_EVENT(CAddConfigurationFile, IDC_BL_AddOK, 1, CAddConfigurationFile::LBtClickedBlAddOK, VTS_I4)
@@ -146,7 +133,7 @@ int CAddConfigurationFile::AddFile()
 						CMsgBox MsgBox(this);
 						CString strConfigurationName;
 
-						strConfigurationName = m_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
+						strConfigurationName = g_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
 
 						if (GetFileAttributes(strConfigurationName) != -1) //如果文件存在
 						{
@@ -292,7 +279,7 @@ void CAddConfigurationFile::TextChangedBlCheckmodename(LPCTSTR strNew)
 
 		CString strConfigurationName;
 
-		strConfigurationName = m_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
+		strConfigurationName = g_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
 
 		CString strInputString;//输入的多项式二进制串
 		int nWidth = 0;//检验码宽度
@@ -328,7 +315,7 @@ void CAddConfigurationFile::ShowConfigurationParam()
 
 	CString strConfigurationName;
 
-	strConfigurationName = m_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
+	strConfigurationName = g_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
 
 	CString strInputString;//输入的多项式二进制串
 	int nWidth = 0;//检验码宽度
@@ -363,7 +350,7 @@ void CAddConfigurationFile::ShowConfigurationParam()
 void CAddConfigurationFile::SaveConfigurationParam()
 {
 	CString strPath;
-	strPath = m_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
+	strPath = g_strExePath + _T("\\Configuration\\") + m_BL_CheckModeName.GetValueText() + _T(".ini");
 
 	CString strInputString;
 	CString strWidth;

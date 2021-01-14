@@ -6,8 +6,8 @@
 
 #include "ControllerDlg.h"
 #include "ControllerAddDlg.h"
-#include "FindCtrlFile.h"
 #include "MsgInfoDlg.h"
+#include "ProjectName.h"
 #include "..\\BlendWndDll\Register.h"
 
 #include "..\\SerialPortDll\RS232.h"
@@ -16,7 +16,7 @@
 #include "..\\CRCDll\\CRCDlg.h"
 #include "..\\ExcelDll\Excel.h"
 #include "..\\RegisterDll\RegisterDlg.h"
-#include "..\\SoftwareInfoDll\\SoftwareInfoDlg.h"
+#include "..\\SoftwareManageDll\VerisonManage.h"
 
 #include <vector>
 #include <math.h>
@@ -29,7 +29,7 @@
 #pragma comment(lib, "..\\Debug\\CRCDll.lib")
 #pragma comment(lib, "..\\Debug\\ExcelDll.lib")
 #pragma comment(lib, "..\\Debug\\RegisterDll.lib")
-#pragma comment(lib, "..\\Debug\\SoftwareInfoDll.lib")
+#pragma comment(lib, "..\\Debug\\SoftwareManageDll.lib")
 #define DEBUGSTYLE   0
 #else
 #pragma comment(lib, "..\\Release\\BlendWndDll.lib")
@@ -37,7 +37,7 @@
 #pragma comment(lib, "..\\Release\\CRCDll.lib")
 #pragma comment(lib, "..\\Release\\ExcelDll.lib")
 #pragma comment(lib, "..\\Release\\RegisterDll.lib")
-#pragma comment(lib, "..\\Release\\SoftwareInfoDll.lib")
+#pragma comment(lib, "..\\Release\\SoftwareManageDll.lib")
 #define RELEASESTYLE   1
 #endif
 
@@ -82,7 +82,8 @@ public:
 	vector<CBlender<CControllerDlg>*> m_pControllerDlg;
 	CBlender<CControllerAddDlg> m_ControllerAddDlg;
 	CBlender<CRegisterDlg> m_Register;
-	CBlender<CSoftwareInfoDlg> m_SoftwareInfoDlg;
+	CBlender<CVerisonManage> m_VerisonMange;
+	CBlender<CProjectName> m_ProjectName;
 
 public:
 
@@ -122,6 +123,8 @@ public:
 	BOOL m_bIsBalloonTipShow;//氣泡窗口是否在顯示
 
 	CString m_strSoftwareVersion;//軟件版本號
+
+	CString m_strWndText;
 
 public:
 	CRS232  m_Port;

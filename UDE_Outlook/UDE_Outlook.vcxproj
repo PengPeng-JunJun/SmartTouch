@@ -105,19 +105,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AngleTestListDlg.h" />
+    <ClInclude Include="AutoLockTime.h" />
     <ClInclude Include="ControllerAddDlg.h" />
     <ClInclude Include="ControllerDlg.h" />
     <ClInclude Include="CtrlSet.h" />
     <ClInclude Include="DataCollectionDlg.h" />
     <ClInclude Include="DiameterTestDlg.h" />
     <ClInclude Include="ErrorListDlg.h" />
-    <ClInclude Include="FindCtrlFile.h" />
     <ClInclude Include="MsgInfoDlg.h" />
     <ClInclude Include="MsgListDlg.h" />
     <ClInclude Include="NewSmartDots.h" />
     <ClInclude Include="NumberInputDlg.h" />
     <ClInclude Include="ParameterAddDlg.h" />
     <ClInclude Include="ParameterListDlg.h" />
+    <ClInclude Include="ProjectName.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SmartDotsListDlg.h" />
     <ClInclude Include="SmartLEDListDlg.h" />
@@ -131,19 +132,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AngleTestListDlg.cpp" />
+    <ClCompile Include="AutoLockTime.cpp" />
     <ClCompile Include="ControllerAddDlg.cpp" />
     <ClCompile Include="ControllerDlg.cpp" />
     <ClCompile Include="CtrlSet.cpp" />
     <ClCompile Include="DataCollectionDlg.cpp" />
     <ClCompile Include="DiameterTestDlg.cpp" />
     <ClCompile Include="ErrorListDlg.cpp" />
-    <ClCompile Include="FindCtrlFile.cpp" />
     <ClCompile Include="MsgInfoDlg.cpp" />
     <ClCompile Include="MsgListDlg.cpp" />
     <ClCompile Include="NewSmartDots.cpp" />
     <ClCompile Include="NumberInputDlg.cpp" />
     <ClCompile Include="ParameterAddDlg.cpp" />
     <ClCompile Include="ParameterListDlg.cpp" />
+    <ClCompile Include="ProjectName.cpp" />
     <ClCompile Include="SmartDotsListDlg.cpp" />
     <ClCompile Include="SmartLEDListDlg.cpp" />
     <ClCompile Include="SmartRobotListDlg.cpp" />

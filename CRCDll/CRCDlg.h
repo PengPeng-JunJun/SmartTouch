@@ -54,7 +54,6 @@ public:
 
 public:
 	virtual BOOL OnInitDialog();
-	virtual void _DefaultFocus(void);
 	DECLARE_EVENTSINK_MAP()
 	void ValueChangedBlInputstring(LPCTSTR strNew);
 	void StatusChangedBlDataStyleHex(BOOL bNewStatus);
@@ -79,7 +78,5 @@ public:
 	void LBtClickedBlAddconfigurationshow(long nFlags);
 
 	CString SearchFile(CString strDir, CString strExt, BOOL bSelf);
-
-	CString GetExePath(void);//获取绝对路径
 
 };

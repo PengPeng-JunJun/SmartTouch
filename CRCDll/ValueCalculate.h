@@ -3,6 +3,14 @@
 #include "math.h"
 #include <vector>
 
+#include "..\\FindFileDll\FindCtrlFile.h"
+
+#ifdef _DEBUG
+#pragma comment(lib, "..\\Debug\\FindFileDll.lib")
+#else
+#pragma comment(lib, "..\\Release\\FindFileDll.lib")
+#endif
+
 #define  Bin   2
 #define  DEC   10
 #define  HEX   16
@@ -61,10 +69,6 @@ public:
 	CValueCalculate(void);
 	~CValueCalculate(void);
 
-	//==============获取文件的当前路径============//
-	CString GetExePath(void);
-
-
 	//=============输入需要转换的数字和转换的进制=================//
 	int ValueCalculate(int nValue, int nTransform);
 
@@ -90,6 +94,9 @@ public:
 
 	//===============切割字符串，需要提供源字符串和切割标记字符,返回向量未删除标记字符后===========//
 	vector<CString> CutString(CString strInpur, char chTag);
+
+	//===============切割字符串，需要提供源字符串和切割标记字符,返回向量未删除标记字符后===========//
+	vector<CString> CutStringElse(CString strInpur, char chTag);
 
 	//===============切割字符串，需要提供源字符串和平均切割间隔计数,返回向量===========//
 	vector<CString> CutString(CString strInpur, int nCounter);

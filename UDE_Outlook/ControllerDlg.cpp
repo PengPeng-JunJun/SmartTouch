@@ -39,6 +39,7 @@ CControllerDlg::CControllerDlg(CWnd* pParent /*=NULL*/)
 	, m_bRelaySwAutoStatus(FALSE)
 	, m_bRelaySwUnAutoStatus(FALSE)
 	, m_bLocked(TRUE)
+	, m_nAutoLockTime(30000)
 {
 	m_vbRelayBtStatus.resize(BT_RELAY_SUM);
 	m_vstrRelayBt.resize(BT_RELAY_SUM);
@@ -106,6 +107,7 @@ CControllerDlg::CControllerDlg(UINT nIDTemplate, CWnd * pParent/* = nullptr*/)
 	, m_bRelaySwAutoStatus(FALSE)
 	, m_bRelaySwUnAutoStatus(FALSE)
 	, m_bLocked(TRUE)
+	, m_nAutoLockTime(30000)
 {
 	m_vbRelayBtStatus.resize(BT_RELAY_SUM);
 	m_vstrRelayBt.resize(BT_RELAY_SUM);
@@ -282,6 +284,9 @@ BOOL CControllerDlg::OnInitDialog()
 	m_NewSmartDotsDlg.CreateBlendWnd(IDD_NEWSMARTDOTS, this);
 	m_NewSmartDotsDlg.CreateTopWnd(FALSE, FALSE);
 
+	m_AutoLockTimeDlg.CreateBlendWnd(IDD_NEWSMARTDOTS, this);
+
+
 	m_ParameterListDlg->m_pParameterListDlg = this;
 	m_ErrorListDlg->m_pErrorListDlg = this;
 	m_SmartDotsListDlg->m_pSmartDotsListDlg = this;
@@ -372,7 +377,7 @@ void CControllerDlg::SetMainMenu()
 
 	m_BL_ControllerMenu.AddPopByPosPosPos(0, 1, 0, 0, _T("消息配置"), _T("報警消息...;焊點檢測消息...;機械手消息...;直徑檢測消息...;角度檢測消息...;外觀檢測消息...;視覺檢測...;LED試燈檢測...;新焊點檢測..."));
 
-	m_BL_ControllerMenu.AddPopByPosPosPos(0, 2, 0, 0, _T("幫助"), _T("報警查看...;消息列表..."));
+	m_BL_ControllerMenu.AddPopByPosPosPos(0, 2, 0, 0, _T("幫助"), _T("報警查看...;消息列表...;設置鎖定延時..."));
 
 	
 // 	m_BL_MainMenu.CheckItemByPos(_T("設置"), 3, m_bAutoRun);
@@ -1317,7 +1322,7 @@ void CControllerDlg::UpdateSmartRobotList()
 	}
 	else
 	{
-		return;
+		//return;
 	}
 
 	for (int i = m_SmartRobotListDlg->m_BL_GetSmartRobotList.GetRows() - 1; i >= 0; i--)
@@ -1586,6 +1591,7 @@ void CControllerDlg::Serialize(CArchive& ar)
 			ar << m_vstrParameterPt[i];
 			ar << m_vstrParameterUnit[i];
 		}
+		ar << m_nAutoLockTime;
 		m_ErrorListDlg->Serialize(ar);
 		m_SmartDotsListDlg->Serialize(ar);
 		m_UDEVisionListDlg->Serialize(ar);
@@ -1801,6 +1807,11 @@ void CControllerDlg::Serialize(CArchive& ar)
 			}
 		}
 		LoadFileData();
+
+		if (_ttoi(vstrTem[0]) >= 11)
+		{
+			ar >> m_nAutoLockTime;
+		}
 		m_ErrorListDlg->Serialize(ar);
 		if (_ttoi(vstrTem[0]) >= 2)
 		{
@@ -1994,7 +2005,7 @@ void CControllerDlg::OnTimer(UINT_PTR nIDEvent)
 			KillTimer(6);
 			if (m_ParameterListDlg->m_bParamInputting)
 			{
-				CLOSE_TIMER_STAR;
+				SetTimer(6, m_nAutoLockTime, NULL);
 				break;
 			}
 			const BOOL bLock = TRUE;
@@ -2459,7 +2470,7 @@ afx_msg LRESULT CControllerDlg::OnCkRealy(WPARAM wParam, LPARAM lParam)
 			if (m_BL_swConnect.GetStatus())
 			{
 				KillTimer(6);
-				CLOSE_TIMER_STAR;
+				SetTimer(6, m_nAutoLockTime, NULL);
 			}
 			break;
 		}
@@ -2499,7 +2510,7 @@ afx_msg LRESULT CControllerDlg::OnDpRealy(WPARAM wParam, LPARAM lParam)
 				if (m_BL_swConnect.GetStatus())
 				{
 					KillTimer(6);
-					CLOSE_TIMER_STAR;
+					SetTimer(6, m_nAutoLockTime, NULL);
 				}
 				break;
 			}
@@ -2943,6 +2954,11 @@ void CControllerDlg::ItemClickBlControllermenu(LPCTSTR strMenu, LPCTSTR strItem,
 			m_MsgListDlg->ShowWindow(SW_SHOW);
 			break;
 		case 2:
+			m_AutoLockTimeDlg->m_nAutoLockTime = m_nAutoLockTime;
+			if (IDOK == m_AutoLockTimeDlg.CreateTopWnd(TRUE, TRUE))
+			{
+				m_nAutoLockTime = m_AutoLockTimeDlg->m_nAutoLockTime;
+			}
 			break;
 		default:
 			break;
@@ -2957,7 +2973,7 @@ void CControllerDlg::StatusChangedBlswconnect(BOOL bStatus)
 	if (bStatus)//開始連接
 	{
 		StartConnect();
-		CLOSE_TIMER_STAR;
+		SetTimer(6, m_nAutoLockTime, NULL);
 	}
 	else
 	{
@@ -3089,7 +3105,7 @@ void CControllerDlg::StartConnect()
 	}
 	m_UDEOutlookListDlg->m_BL_btUDEOutlookContinue.SetEnabled(TRUE);
 
-	m_SmartRobotListDlg->m_BL_edSmartRobotCode.SetReadOnly(FALSE);
+	m_SmartRobotListDlg->m_BL_edSmartRobotCode.SetEnabled(TRUE);
 	m_SmartRobotListDlg->m_BL_SendSmartRobotList.SetReadOnly(FALSE);
 	m_SmartRobotListDlg->m_BL_GetSmartRobotList.SetReadOnly(FALSE);
 	m_SmartRobotListDlg->m_BL_btLoadSmartRobot.SetEnabled(TRUE);
@@ -3130,10 +3146,11 @@ void CControllerDlg::StartConnect()
 	}
 	m_UDEVisionListDlg->m_BL_btUDEVisionContinue.SetEnabled(TRUE);
 
-	m_SmartRobotListDlg->m_BL_edSmartRobotCode.SetReadOnly(TRUE);
+	m_SmartRobotListDlg->m_BL_edSmartRobotCode.SetEnabled(FALSE);
 	m_SmartRobotListDlg->m_BL_SendSmartRobotList.SetReadOnly(TRUE);
 	m_SmartRobotListDlg->m_BL_GetSmartRobotList.SetReadOnly(TRUE);
 	m_SmartRobotListDlg->m_BL_btLoadSmartRobot.SetEnabled(FALSE);
+
 	m_SmartLEDListDlg->m_BL_btLoadSmartLED.SetEnabled(FALSE);
 	m_SmartLEDListDlg->m_BL_edSmartLEDCode.SetEnabled(FALSE);
 	m_SmartLEDListDlg->m_BL_SmartLEDList.SetReadOnly(TRUE);
@@ -3319,7 +3336,7 @@ afx_msg LRESULT CControllerDlg::OnGetLockState(WPARAM wParam, LPARAM lParam)
 	{
 		if (m_BL_swConnect.GetStatus())
 		{
-			CLOSE_TIMER_STAR;
+			SetTimer(6, m_nAutoLockTime, NULL);
 		}
 		for (int i = 0; i < CK_RELAY_SUM; i++)
 		{

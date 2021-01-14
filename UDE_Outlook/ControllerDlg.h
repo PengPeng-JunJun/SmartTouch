@@ -1,10 +1,9 @@
 #pragma once
 
 #include "..\BlendWndDll\MsgBox.h"
-
 #include "..\ExcelDll\Excel.h"
+#include "..\FindFileDll\FindCtrlFile.h"
 
-#include "FindCtrlFile.h"
 #include "CtrlSet.h"
 #include "MsgListDlg.h"
 #include "ParameterListDlg.h"
@@ -19,9 +18,9 @@
 #include "SmartLEDListDlg.h"
 #include "DataCollectionDlg.h"
 #include "NewSmartDots.h"
+#include "AutoLockTime.h"
 
 #include "..\\CRCDll\\ValueCalculate.h"
-
 
 #include <vector>
 #include <math.h>
@@ -32,11 +31,13 @@
 #pragma comment(lib, "..\\Debug\\BlActiveXDll.lib")
 #pragma comment(lib, "..\\Debug\\ExcelDll.lib")
 #pragma comment(lib, "..\\Debug\\CRCDll.lib")
+#pragma comment(lib, "..\\Debug\\FindFileDll.lib")
 #else
 #pragma comment(lib, "..\\Release\\BlendWndDll.lib")
 #pragma comment(lib, "..\\Release\\BlActiveXDll.lib")
 #pragma comment(lib, "..\\Release\\ExcelDll.lib")
 #pragma comment(lib, "..\\Release\\CRCDll.lib")
+#pragma comment(lib, "..\\Release\\FindFileDll.lib")
 #endif
 
 #define  WM_STARTCOLLECT  WM_USER + 10//主->從
@@ -67,8 +68,6 @@
 #define WM_BT_REALY 1025
 #define WM_CK_REALY 1026
 #define WM_DP_REALY 1027
-
-#define CLOSE_TIMER_STAR   SetTimer(6, 60000, NULL);//定時鎖定軟件啟動,30秒未操作軟件，軟件鎖定
 
 // CControllerDlg 对话框
 
@@ -105,6 +104,7 @@ public:
 	CBlender<CUDEVisionListDlg> m_UDEVisionListDlg;
 	CBlender<CSmartLEDListDlg> m_SmartLEDListDlg;
 	CBlender<CNewSmartDots>  m_NewSmartDotsDlg;
+	CBlender<CAutoLockTime>  m_AutoLockTimeDlg;
 public:
 
 	//CString m_strExcelPath;
@@ -177,6 +177,7 @@ public:
 	LARGE_INTEGER m_nEndTime;
 	CString m_strTime;
 
+	int m_nAutoLockTime;//自動鎖定時長
 	void LoadFileData();
 
 public:

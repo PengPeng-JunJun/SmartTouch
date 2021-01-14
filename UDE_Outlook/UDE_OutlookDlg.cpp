@@ -70,6 +70,7 @@ CUDE_OutlookDlg::CUDE_OutlookDlg(CWnd* pParent /*=NULL*/)
 	, m_bCommuncating(FALSE)
 	, m_bInterruptRead(FALSE)
 	, m_nCommunicationMode(3)
+	, m_strWndText(_T("UDE SMART TOUCH"))
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -207,10 +208,9 @@ BOOL CUDE_OutlookDlg::OnInitDialog()
 
 	SetTimer(4, 0, NULL);//啟動間斷收集Timmer，每個1MS掃描一次消息向量
 
-	
 	m_BL_ReportMainList.SetReadOnly(m_swBaseLock.GetStatus());
 	
-	
+	m_FindCtrlFile.GetExePath();
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -462,7 +462,7 @@ void CUDE_OutlookDlg::SetMainMenu()
 		m_BL_MainMenu.AddPopByPosPosPos(1, 0, 4, 0,_T("最近開啟檔案"), strHistoryPath);
 	}
 
-	m_BL_MainMenu.AddPopByPosPosPos(0, 1, 0, 0, _T("設置"), _T("串口設置...;CRC循環冗餘校驗...;添加設備...;開機啟動...;最小化到托盤...;自動加載檔案..."));
+	m_BL_MainMenu.AddPopByPosPosPos(0, 1, 0, 0, _T("設置"), _T("串口設置...;CRC循環冗餘校驗...;添加設備...;開機啟動...;最小化到托盤...;自動加載檔案...;設置窗口名稱..."));
 	
 	m_BL_MainMenu.AddPopByPosPosPos(0, 2, 0, 0, _T("幫助"), _T("關於 SmartTouch...;軟體註冊..."));
 
@@ -497,8 +497,10 @@ void CUDE_OutlookDlg::CreateChildWindow()
 	m_Register.CreateTopWnd(FALSE, FALSE);
 	m_Register->m_pRegister = this;
 	
-	m_SoftwareInfoDlg.CreateBlendWnd(IDD_SOFTWAREINFODLG, this);
-	m_SoftwareInfoDlg.CreateTopWnd(FALSE, FALSE);
+	m_VerisonMange.CreateBlendWnd(IDD_VERISONMANAGE, this);
+	m_VerisonMange.CreateTopWnd(FALSE, FALSE);
+
+	m_ProjectName.CreateBlendWnd(IDD_VERISONMANAGE, this);
 }
 
 CString CUDE_OutlookDlg:: GetExePath(void)  
@@ -1069,10 +1071,17 @@ void CUDE_OutlookDlg::ItemClickBlMainMenu(LPCTSTR strMenu, LPCTSTR strItem, shor
 			m_BL_MainMenu.CheckItemByPos(_T("設置"), 4, !bChecked);
 			m_bMin2Tray = !bChecked;
 			break;
-
 		case 5:
 			m_BL_MainMenu.CheckItemByPos(_T("設置"), 5, !bChecked);
 			m_bAutoFindFile = !bChecked;
+			break;
+		case 6:
+			m_ProjectName->m_strProjectName = m_strWndText;
+			if (IDOK == m_ProjectName.CreateTopWnd(TRUE, TRUE))
+			{
+				m_strWndText = m_ProjectName->m_strProjectName;
+				SetWindowText(m_strWndText);
+			}
 			break;
 		default:
 			break;
@@ -1083,7 +1092,9 @@ void CUDE_OutlookDlg::ItemClickBlMainMenu(LPCTSTR strMenu, LPCTSTR strItem, shor
 		switch (nItemPos)
 		{
 		case 0:
-			m_SoftwareInfoDlg->ShowWindow(SW_SHOW);
+			m_VerisonMange->ShowWindow(SW_SHOW);
+			m_VerisonMange->CenterWindow(this);
+			m_VerisonMange->_ShowInfo();
 			break;
 		case 1:
 			m_Register->CheckRegisterList(CHECKREGISTERLIST);
@@ -2242,7 +2253,7 @@ void CUDE_OutlookDlg::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{	// storing code
-		ar << m_SoftwareInfoDlg->m_BL_btVersion.GetCaption();
+		ar << m_VerisonMange->m_BL_btVersion.GetCaption();
 		ar << m_BL_DateReport.GetSelect();
 		ar << m_BL_MouthReport.GetSelect();
 		ar << m_BL_ReportMainList.GetRows();
@@ -2252,6 +2263,7 @@ void CUDE_OutlookDlg::Serialize(CArchive& ar)
 			ar << m_BL_ReportMainList.GetItemText(nCounter, 2);
 			ar << m_BL_ReportMainList.GetItemText(nCounter, 3);
 		}
+		ar << m_strWndText;
 	}
 	else
 	{	// loading code
@@ -2285,6 +2297,15 @@ void CUDE_OutlookDlg::Serialize(CArchive& ar)
 			(*m_pControllerDlg[nCounter])->m_bLocked = m_swBaseLock.GetStatus();
 			(*m_pControllerDlg[nCounter])->PostMessage(WM_LOCK_STATE, m_swBaseLock.GetStatus());
 		}
+		m_strSoftwareVersion.Append(_T("."));
+		vector<CString> vstrTem;
+		CValueCalculate ValueCalculate;
+		vstrTem = ValueCalculate.CutString(m_strSoftwareVersion, '.');
+		if (_ttoi(vstrTem[0]) >= 11)
+		{
+			ar >> m_strWndText;
+		}
+		SetWindowText(m_strWndText);
 	}
 }
 

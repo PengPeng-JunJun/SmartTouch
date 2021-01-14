@@ -5,7 +5,6 @@
 #include "CRCDlg.h"
 #include "afxdialogex.h"
 
-
 // CCRCDlg 对话框
 
 IMPLEMENT_DYNAMIC(CCRCDlg, CTpLayerWnd)
@@ -55,41 +54,29 @@ BOOL CCRCDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	SetTitle(_T("CRC循環冗餘校驗"));
 
-	m_strExePath = GetExePath();
+	m_strExePath = g_strExePath;
 
 	LoadConfigurationFile(m_strExePath + _T("\\Configuration"), _T(".ini"), TRUE);
-	
+
+	m_BtBaseOk.ShowWindow(SW_HIDE);
+	m_BtBaseCancel.ShowWindow(SW_HIDE);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }
 
-void CCRCDlg:: _DefaultFocus(void)
-{
-	m_BtBaseOk.ShowWindow(FALSE);
-	m_BtBaseCancel.ShowWindow(FALSE);
-}
 void CCRCDlg::LBtClickedBlAddconfigurationshow(long nFlags)
 {
 	m_AddConfigurationFile->m_strDropdownData = m_BL_CheckMode.GetDropDownData();
 	m_AddConfigurationFile.CreateTopWnd(TRUE, FALSE);
-	LoadConfigurationFile(m_strExePath + _T("\\Configuration"), _T(".ini"), TRUE);
+	LoadConfigurationFile(g_strExePath + _T("\\Configuration"), _T(".ini"), TRUE);
 	// TODO: 在此处添加消息处理程序代码
 }
-
-CString CCRCDlg::GetExePath(void)  
-{  
-	CString strExePath;  
-	GetModuleFileName(NULL, strExePath.GetBuffer(MAX_PATH), MAX_PATH);  
-	strExePath.ReleaseBuffer();  
-	strExePath = strExePath.Left(strExePath.ReverseFind(_T('\\')));  
-	return strExePath;  
-}  
-
 
 BOOL CCRCDlg::SearchConfigurationFile()
 {
 	CString strFolderPath;
-	strFolderPath = m_strExePath + _T("\\Configuration");
+	strFolderPath = g_strExePath + _T("\\Configuration");
 	//判断路径是否存在   
 	if(!PathIsDirectory(strFolderPath))   
 	{
@@ -334,7 +321,7 @@ void CCRCDlg::CRCCheck(CString strInput, int nDataType, CString strChecckMode)
 	CString strResult_HEX;
 	CString strResult_Bin;
 
-	strConfigurationName = m_strExePath + _T("\\Configuration\\") + strChecckMode + _T(".ini");
+	strConfigurationName = g_strExePath + _T("\\Configuration\\") + strChecckMode + _T(".ini");
 
 	if (GetFileAttributes(strConfigurationName) != -1) //如果文件存在
 	{
@@ -353,7 +340,7 @@ void CCRCDlg::CRCCheck(CString strInput, int nDataType, CString strChecckMode)
 void CCRCDlg::CRCCheck(CString strInput, int nDataType, CString strChecckMode, CString & strResult_HEX, CString & strResult_Bin)
 {
 	CMsgBox MsgBox(this);
-	CString strConfigurationName = m_strExePath + _T("\\Configuration\\") + strChecckMode + _T(".ini");
+	CString strConfigurationName = g_strExePath + _T("\\Configuration\\") + strChecckMode + _T(".ini");
 
 	if (GetFileAttributes(strConfigurationName) != -1) //如果文件存在
 	{
