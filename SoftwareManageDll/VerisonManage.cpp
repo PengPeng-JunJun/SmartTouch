@@ -65,6 +65,10 @@ void CVerisonManage::_ShowInfo()
 	UpdateInfoTemp.strUpdateInfo = _T("1.關於界面添加軟件升級信息;2.修改手臂消息BUG;3.自動鎖定時長可設置;4.窗口名稱可設置");
 	deUpdateInfo.push_front(UpdateInfoTemp);
 
+	UpdateInfoTemp.strUpdateDate = _T("V11.1.2    修改時間：2021年01月21日");
+	UpdateInfoTemp.strUpdateInfo = _T("1.修改自動加載檔案BUG");
+	deUpdateInfo.push_front(UpdateInfoTemp);
+
 
 	CValueCalculate ValueCalculate;
 	for (size_t i = 0; i < deUpdateInfo.size(); i++)

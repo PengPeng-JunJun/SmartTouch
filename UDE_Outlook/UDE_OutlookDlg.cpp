@@ -158,6 +158,8 @@ BOOL CUDE_OutlookDlg::OnInitDialog()
 // 
 	//設置托盤圖標等信息，
 
+	m_FindCtrlFile.GetExePath();
+
 	m_nid.cbSize  = (DWORD)sizeof(NOTIFYICONDATA);
 	m_nid.hWnd    = this->m_hWnd;
 	m_nid.uID     = IDR_MAINFRAME;
@@ -197,7 +199,6 @@ BOOL CUDE_OutlookDlg::OnInitDialog()
 	m_BL_Collect.ShowWindow(SW_HIDE);
 	m_BL_CollectStatus.ShowWindow(SW_HIDE);
 
-
 	m_Register->CheckRegisterList(CHECKREGISTERLIST);
 
 	m_BtBaseOk.ShowWindow(FALSE);
@@ -210,7 +211,7 @@ BOOL CUDE_OutlookDlg::OnInitDialog()
 
 	m_BL_ReportMainList.SetReadOnly(m_swBaseLock.GetStatus());
 	
-	m_FindCtrlFile.GetExePath();
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -2267,6 +2268,7 @@ void CUDE_OutlookDlg::Serialize(CArchive& ar)
 	}
 	else
 	{	// loading code
+		/*m_FindCtrlFile.GetExePath();*/
 		ar >> m_strSoftwareVersion;
 		BOOL bAr = FALSE;
 		ar >> bAr;
